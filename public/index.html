@@ -6,7 +6,224 @@
     <title>Habte Job Portal - Find Jobs & Create Professional CVs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #E8F5E9;
+            --primary-dark: #388E3C;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --light-text: #666;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            padding-top: 56px;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234CAF50" opacity="0.1"/></svg>');
+            padding: 80px 0;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .pricing-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card h3 {
+            color: var(--primary-color);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .telebirr-logo {
+            width: 120px;
+            margin: 15px auto;
+            display: block;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--primary-light);
+            padding: 40px 0 20px;
+        }
+        
+        .social-icon {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary-color);
+        }
+        
+        .job-card, .cv-template {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .main-cta {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .telegram-channel {
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+        }
+        
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 300px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .main-cta {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .toast {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+            }
+            
+            .debug-panel {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -62,6 +279,25 @@
         </div>
     </div>
 
+    <!-- Debug Panel -->
+    <div class="debug-panel" id="debug-panel">
+        <h6 class="mb-3">API Connection Debug</h6>
+        <div class="mb-2">
+            <strong>API Base URL:</strong>
+            <span id="debug-api-url" class="text-muted"></span>
+        </div>
+        <div class="mb-2">
+            <strong>Status:</strong>
+            <span id="debug-status" class="badge bg-danger">Disconnected</span>
+        </div>
+        <div class="mb-3">
+            <strong>Last Error:</strong>
+            <span id="debug-error" class="text-muted">None</span>
+        </div>
+        <button class="btn btn-sm btn-outline-primary me-2" id="retry-connection">Retry</button>
+        <button class="btn btn-sm btn-outline-secondary" id="toggle-debug">Hide</button>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container text-center">
@@ -81,6 +317,12 @@
             
             <div class="row" id="jobs-container">
                 <!-- Jobs will be loaded here dynamically -->
+                <div class="col-12 text-center py-5" id="jobs-loading">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Loading jobs...</p>
+                </div>
             </div>
             
             <div class="text-center mt-4">
@@ -124,7 +366,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="salaryRange" class="form-label">Salary Range</label>
-                                        <input type="text" class="form-control" id="salaryRange" placeholder="e.g., ETB 50,000 - ETB 70,000">
+                                        <input type="text" class="form-control" id="salaryRange" placeholder="e.g., $50,000 - $70,000">
                                     </div>
                                 </div>
                                 
@@ -149,7 +391,7 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="telegramPost" checked>
                                         <label class="form-check-label" for="telegramPost">
-                                            Post to Telegram channel @hiringeth (+250 ETB)
+                                            Post to Telegram channel @hiringeth (+50 ETB)
                                         </label>
                                     </div>
                                 </div>
@@ -163,11 +405,11 @@
                                     
                                     <div class="alert alert-info">
                                         <i class="fas fa-info-circle me-2"></i>
-                                        Total amount to pay: <strong>450 ETB</strong> (250 ETB for job posting + 200 ETB for Telegram )
+                                        Total amount to pay: <strong>150 ETB</strong> (100 ETB for job posting + 50 ETB for Telegram promotion)
                                     </div>
                                     
                                     <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-lg">Pay with Telebirr +251941016936 and Post Job</button>
+                                        <button type="submit" class="btn btn-primary btn-lg">Pay with Telebirr and Post Job</button>
                                     </div>
                                 </div>
                             </form>
@@ -250,14 +492,14 @@
     <!-- Pricing Section -->
     <section id="pricing" class="py-5 bg-light">
         <div class="container">
-            <h2 class="section-title">Pricing</h2>
+            <h2 class="section-title">Transparent Pricing</h2>
             <p class="text-center mb-5">Choose the plan that works best for you. All plans include shareable links.</p>
             
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="pricing-card">
                         <h3>Basic</h3>
-                        <div class="price">200 ETB</div>
+                        <div class="price">100 ETB</div>
                         <p class="text-muted">Job Posting</p>
                         <ul class="list-unstyled my-4">
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i>30 days listing</li>
@@ -273,7 +515,7 @@
                     <div class="pricing-card featured">
                         <span class="badge bg-primary position-absolute top-0 end-0 m-3">Popular</span>
                         <h3>Standard</h3>
-                        <div class="price">450 ETB</div>
+                        <div class="price">150 ETB</div>
                         <p class="text-muted">Job Posting + Telegram</p>
                         <ul class="list-unstyled my-4">
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i>30 days listing</li>
@@ -286,26 +528,9 @@
                 </div>
                 
                 <div class="col-md-4 mb-4">
-                    <div class="pricing-card featured">
-                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">Popular</span>
-                        <h3>Pro</h3>
-                        <div class="price">850 ETB</div>
-                        <p class="text-muted">Job Posting + Telegram + Facebook</p>
-                        <p class="text-muted">Job Specification Support</p>
-                        <ul class="list-unstyled my-4">
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>30 days listing+Reels</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Premium visibility</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Shareable link</li>
-                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Telegram promotion</li>
-                        </ul>
-                        <button class="btn btn-primary">Select Plan</button>
-                    </div>
-                </div>
-                
-                <div class="col-md-4 mb-4">
                     <div class="pricing-card">
                         <h3>CV Maker</h3>
-                        <div class="price">300 ETB</div>
+                        <div class="price">50 ETB</div>
                         <p class="text-muted">Professional CV</p>
                         <ul class="list-unstyled my-4">
                             <li class="mb-2"><i class="fas fa-check text-success me-2"></i>ATS-friendly templates</li>
@@ -360,7 +585,7 @@
                     <h5>Contact Us</h5>
                     <ul class="list-unstyled">
                         <li><i class="fas fa-envelope me-2"></i>info@habtejobs.com</li>
-                        <li><i class="fas fa-phone me-2"></i>+251 941016936</li>
+                        <li><i class="fas fa-phone me-2"></i>+251 911 234 567</li>
                         <li><i class="fas fa-map-marker-alt me-2"></i>Addis Ababa, Ethiopia</li>
                     </ul>
                 </div>
@@ -368,7 +593,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <p class="mb-0">&copy; 2025 Habte Job Portal. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2023 Habte Job Portal. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end mb-3">
                     <a href="#" class="text-decoration-none text-dark me-3">Privacy Policy</a>
@@ -515,7 +740,7 @@
                         
                         <div class="mb-3">
                             <label for="profileSkills" class="form-label">Skills (comma separated)</label>
-                            <input type="text" class="form-control" id="profileSkills" placeholder="e.g., JavaScript, AutoCAD, Node.js">
+                            <input type="text" class="form-control" id="profileSkills" placeholder="e.g., JavaScript, React, Node.js">
                         </div>
                         
                         <div class="d-grid">
@@ -595,7 +820,7 @@
                             
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                Total amount to pay: <strong>300 ETB</strong> for CV creation and hosting
+                                Total amount to pay: <strong>50 ETB</strong> for CV creation and hosting
                             </div>
                             
                             <div class="d-grid">
@@ -612,7 +837,6 @@
     <script>
         // API Base URL - Change this to your Render deployment URL
         const API_BASE_URL = 'https://habtejobportal.onrender.com/api';
-//        const API_BASE_URL = 'https://habtejobportal.onrender.com/api';
         
         // DOM Elements
         const authButtons = document.getElementById('auth-buttons');
@@ -625,6 +849,7 @@
         const jobForm = document.getElementById('job-form');
         const cvForm = document.getElementById('cv-form');
         const jobsContainer = document.getElementById('jobs-container');
+        const jobsLoading = document.getElementById('jobs-loading');
         const toast = document.querySelector('.toast');
         const toastMessage = document.getElementById('toast-message');
         const logoutBtn = document.getElementById('logout-btn');
@@ -634,9 +859,45 @@
         const profileUpload = document.getElementById('profile-upload');
         const uploadTrigger = document.getElementById('upload-trigger');
         const profileImage = document.getElementById('profile-image');
+        const debugPanel = document.getElementById('debug-panel');
+        const debugApiUrl = document.getElementById('debug-api-url');
+        const debugStatus = document.getElementById('debug-status');
+        const debugError = document.getElementById('debug-error');
+        const retryConnection = document.getElementById('retry-connection');
+        const toggleDebug = document.getElementById('toggle-debug');
 
         // Initialize Bootstrap toast
         const bsToast = new bootstrap.Toast(toast);
+
+        // Show debug panel by default
+        debugPanel.style.display = 'block';
+        debugApiUrl.textContent = API_BASE_URL;
+
+        // Check API connection
+        async function checkApiConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    debugStatus.textContent = 'Connected';
+                    debugStatus.className = 'badge bg-success';
+                    debugError.textContent = 'None';
+                    return true;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                debugStatus.textContent = 'Disconnected';
+                debugStatus.className = 'badge bg-danger';
+                debugError.textContent = error.message;
+                return false;
+            }
+        }
 
         // Check if user is logged in
         function checkAuthStatus() {
@@ -680,20 +941,37 @@
             }
             
             try {
+                // Update debug status
+                debugStatus.textContent = 'Requesting...';
+                debugStatus.className = 'badge bg-warning';
+                
                 const response = await fetch(`${API_BASE_URL}${url}`, {
                     ...options,
                     headers
                 });
                 
+                // Check if response is OK
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
                 const data = await response.json();
                 
-                if (!response.ok) {
-                    throw new Error(data.message || 'Request failed');
-                }
+                // Update debug status
+                debugStatus.textContent = 'Connected';
+                debugStatus.className = 'badge bg-success';
+                debugError.textContent = 'None';
                 
                 return data;
             } catch (error) {
                 console.error('API request error:', error);
+                
+                // Update debug status
+                debugStatus.textContent = 'Error';
+                debugStatus.className = 'badge bg-danger';
+                debugError.textContent = error.message;
+                
                 throw error;
             }
         }
@@ -701,10 +979,19 @@
         // Load jobs from API
         async function loadJobs() {
             try {
+                jobsLoading.style.display = 'block';
                 const data = await apiRequest('/jobs');
                 displayJobs(data.jobs || []);
+                jobsLoading.style.display = 'none';
             } catch (error) {
                 console.error('Failed to load jobs:', error);
+                jobsLoading.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Unable to load jobs. Please check your connection and try again.
+                    </div>
+                    <button class="btn btn-primary mt-3" onclick="loadJobs()">Retry</button>
+                `;
                 showNotification('Failed to load jobs. Please try again later.', true);
             }
         }
@@ -773,9 +1060,16 @@
         }
 
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            loadJobs();
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check API connection first
+            const isConnected = await checkApiConnection();
+            
+            if (isConnected) {
+                checkAuthStatus();
+                loadJobs();
+            } else {
+                showNotification('Cannot connect to server. Please check your connection.', true);
+            }
             
             // Update active nav link on scroll
             const sections = document.querySelectorAll('section');
@@ -815,6 +1109,27 @@
                     }
                 });
             });
+        });
+
+        // Debug panel functionality
+        retryConnection.addEventListener('click', async function() {
+            const isConnected = await checkApiConnection();
+            if (isConnected) {
+                showNotification('Connection restored!');
+                loadJobs();
+            } else {
+                showNotification('Still unable to connect to server.', true);
+            }
+        });
+
+        toggleDebug.addEventListener('click', function() {
+            if (debugPanel.style.display === 'block') {
+                debugPanel.style.display = 'none';
+                toggleDebug.textContent = 'Show Debug';
+            } else {
+                debugPanel.style.display = 'block';
+                toggleDebug.textContent = 'Hide';
+            }
         });
 
         // Login form submission
