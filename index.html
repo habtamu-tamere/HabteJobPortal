@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habte Job Portal - Find Jobs & Create Professional CVs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #E8F5E9;
+            --primary-dark: #388E3C;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --light-text: #666;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            padding-top: 56px;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234CAF50" opacity="0.1"/></svg>');
+            padding: 80px 0;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .pricing-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card h3 {
+            color: var(--primary-color);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .telebirr-logo {
+            width: 120px;
+            margin: 15px auto;
+            display: block;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+        }
+        
+        footer {
+            background-color: var(--primary-light);
+            padding: 40px 0 20px;
+        }
+        
+        .social-icon {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary-color);
+        }
+        
+        .job-card, .cv-template {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .main-cta {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .telegram-channel {
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .main-cta {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .toast {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-briefcase me-2"></i>Habte Job Portal</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#job-listings">Job Listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#post-job">Post a Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cv-maker">CV Maker</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Pricing</a>
+                    </li>
+                </ul>
+                <div class="d-flex" id="auth-buttons">
+                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                </div>
+                <div id="user-menu" class="dropdown" style="display: none;">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        <i class="fas fa-user me-1"></i> <span id="username">User</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-file-alt me-2"></i>My CVs</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-briefcase me-2"></i>My Jobs</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notifications -->
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-message">
+            <!-- Message will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Find Your Dream Job or Talent</h1>
+            <p class="lead mb-5">Habte Job Portal connects employers with the best talent. Post jobs, create professional CVs, and find opportunities.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="#post-job" class="btn btn-primary btn-lg main-cta me-md-2"><i class="fas fa-plus-circle me-2"></i>Post a Job</a>
+                <a href="#cv-maker" class="btn btn-outline-primary btn-lg main-cta"><i class="fas fa-file-alt me-2"></i>Create CV</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Listings Section -->
+    <section id="job-listings" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Latest Job Opportunities</h2>
+            
+            <div class="row" id="jobs-container">
+                <!-- Jobs will be loaded here dynamically -->
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary">Browse All Jobs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post a Job Section -->
+    <section id="post-job" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Post a Job Opportunity</h2>
+            <p class="text-center mb-5">Reach qualified candidates by posting your job on our platform and Telegram channel <a href="https://t.me/hiringeth" target="_blank">@hiringeth</a></p>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <form id="job-form">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobTitle" class="form-label">Job Title *</label>
+                                        <input type="text" class="form-control" id="jobTitle" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="companyName" class="form-label">Company Name *</label>
+                                        <input type="text" class="form-control" id="companyName" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobType" class="form-label">Job Type *</label>
+                                        <select class="form-select" id="jobType" required>
+                                            <option value="">Select job type</option>
+                                            <option value="full-time">Full-time</option>
+                                            <option value="part-time">Part-time</option>
+                                            <option value="contract">Contract</option>
+                                            <option value="internship">Internship</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="salaryRange" class="form-label">Salary Range</label>
+                                        <input type="text" class="form-control" id="salaryRange" placeholder="e.g., $50,000 - $70,000">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="jobDescription" class="form-label">Job Description *</label>
+                                    <textarea class="form-control" id="jobDescription" rows="5" required></textarea>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="location" class="form-label">Location *</label>
+                                        <input type="text" class="form-control" id="location" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="applicationEmail" class="form-label">Application Email/URL *</label>
+                                        <input type="text" class="form-control" id="applicationEmail" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Posting Options</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="telegramPost" checked>
+                                        <label class="form-check-label" for="telegramPost">
+                                            Post to Telegram channel @hiringeth (+50 ETB)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-top pt-4">
+                                    <h5 class="mb-3">Payment Method</h5>
+                                    <div class="d-flex align-items-center mb-4">
+                                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'><rect width='100' height='40' fill='%23323' rx='5'/><text x='50' y='22' font-family='Arial' font-size='12' fill='white' text-anchor='middle'>Telebirr Mockup</text></svg>" alt="Telebirr" class="telebirr-logo">
+                                        <span class="ms-3">Pay securely with Telebirr</span>
+                                    </div>
+                                    
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Total amount to pay: <strong>150 ETB</strong> (100 ETB for job posting + 50 ETB for Telegram promotion)
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">Pay with Telebirr and Post Job</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CV Maker Section -->
+    <section id="cv-maker" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Create a Professional CV</h2>
+            <p class="text-center mb-5">Choose from our ATS-friendly templates to create a CV that gets noticed by employers</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card cv-template h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h5>Modern Professional</h5>
+                            <p>Clean and contemporary design that works well for all industries</p>
+                            <div class="mt-4">
+                                <span class="badge bg-success">ATS Friendly</span>
+                                <span class="badge bg-primary">Popular</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white text-center">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#cvModal" data-template="professional">Use Template</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card cv-template h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h5>Executive</h5>
+                            <p>Sophisticated layout for experienced professionals and executives</p>
+                            <div class="mt-4">
+                                <span class="badge bg-success">ATS Friendly</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white text-center">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#cvModal" data-template="executive">Use Template</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card cv-template h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <h5>Creative</h5>
+                            <p>Designed for creatives with space for portfolios and projects</p>
+                            <div class="mt-4">
+                                <span class="badge bg-info">Visual Impact</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white text-center">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#cvModal" data-template="creative">Use Template</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary">See All Templates</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Transparent Pricing</h2>
+            <p class="text-center mb-5">Choose the plan that works best for you. All plans include shareable links.</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card">
+                        <h3>Basic</h3>
+                        <div class="price">100 ETB</div>
+                        <p class="text-muted">Job Posting</p>
+                        <ul class="list-unstyled my-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>30 days listing</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Basic visibility</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Shareable link</li>
+                            <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Telegram promotion</li>
+                        </ul>
+                        <button class="btn btn-outline-primary">Select Plan</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card featured">
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">Popular</span>
+                        <h3>Standard</h3>
+                        <div class="price">150 ETB</div>
+                        <p class="text-muted">Job Posting + Telegram</p>
+                        <ul class="list-unstyled my-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>30 days listing</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Premium visibility</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Shareable link</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Telegram promotion</li>
+                        </ul>
+                        <button class="btn btn-primary">Select Plan</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="pricing-card">
+                        <h3>CV Maker</h3>
+                        <div class="price">50 ETB</div>
+                        <p class="text-muted">Professional CV</p>
+                        <ul class="list-unstyled my-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>ATS-friendly templates</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Unlimited edits</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>PDF download</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Shareable link</li>
+                        </ul>
+                        <button class="btn btn-outline-primary">Select Plan</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="telegram-channel text-center mt-5">
+                <h4><i class="fab fa-telegram me-2"></i>Telegram Channel</h4>
+                <p>All jobs posted with the Standard plan are promoted on our Telegram channel <a href="https://t.me/hiringeth" target="_blank">@hiringeth</a> with over 10,000 job seekers.</p>
+                <a href="https://t.me/hiringeth" target="_blank" class="btn btn-outline-primary mt-2"><i class="fab fa-telegram me-2"></i>Join Our Channel</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>Habte Job Portal</h5>
+                    <p>Connecting talented professionals with great companies in Ethiopia and beyond.</p>
+                    <div>
+                        <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>For Job Seekers</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-dark">Browse Jobs</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Create CV</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Career Advice</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>For Employers</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-dark">Post a Job</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Browse CVs</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope me-2"></i>info@habtejobs.com</li>
+                        <li><i class="fas fa-phone me-2"></i>+251 911 234 567</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i>Addis Ababa, Ethiopia</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="mb-0">&copy; 2023 Habte Job Portal. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end mb-3">
+                    <a href="#" class="text-decoration-none text-dark me-3">Privacy Policy</a>
+                    <a href="#" class="text-decoration-none text-dark">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-decoration-none">Forgot password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-jobseeker-tab" data-bs-toggle="pill" data-bs-target="#pills-jobseeker">Job Seeker</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-employer-tab" data-bs-toggle="pill" data-bs-target="#pills-employer">Employer</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-jobseeker">
+                            <form id="seeker-register-form">
+                                <div class="mb-3">
+                                    <label for="seekerName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="seekerName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seekerEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="seekerEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seekerPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="seekerPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Register as Job Seeker</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="pills-employer">
+                            <form id="employer-register-form">
+                                <div class="mb-3">
+                                    <label for="employerCompanyName" class="form-label">Company Name</label>
+                                    <input type="text" class="form-control" id="employerCompanyName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="employerEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="employerEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="employerPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="employerPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Register as Employer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img src="https://via.placeholder.com/150" class="profile-img" alt="Profile" id="profile-image">
+                        <div class="mt-3">
+                            <input type="file" id="profile-upload" class="d-none" accept="image/*">
+                            <button class="btn btn-outline-primary btn-sm" id="upload-trigger">Change Photo</button>
+                        </div>
+                    </div>
+                    
+                    <form id="profile-form">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="profileName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="profileName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="profileEmail" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="profileEmail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="profilePhone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="profilePhone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="profileLocation" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="profileLocation">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="profileBio" class="form-label">Bio/Summary</label>
+                            <textarea class="form-control" id="profileBio" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="profileSkills" class="form-label">Skills (comma separated)</label>
+                            <input type="text" class="form-control" id="profileSkills" placeholder="e.g., JavaScript, React, Node.js">
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CV Creation Modal -->
+    <div class="modal fade" id="cvModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cvModalTitle">Create Your CV</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Complete your profile first to automatically fill in your CV details.
+                    </div>
+                    
+                    <form id="cv-form">
+                        <input type="hidden" id="cvTemplate">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cvFullName" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="cvFullName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvJobTitle" class="form-label">Professional Title *</label>
+                                <input type="text" class="form-control" id="cvJobTitle" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cvEmail" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="cvEmail" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvPhone" class="form-label">Phone *</label>
+                                <input type="tel" class="form-control" id="cvPhone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cvSummary" class="form-label">Professional Summary *</label>
+                            <textarea class="form-control" id="cvSummary" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cvExperience" class="form-label">Work Experience *</label>
+                            <textarea class="form-control" id="cvExperience" rows="4" required placeholder="Include company names, positions, and dates"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cvEducation" class="form-label">Education *</label>
+                            <textarea class="form-control" id="cvEducation" rows="3" required placeholder="Include degrees, institutions, and dates"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cvSkills" class="form-label">Skills *</label>
+                            <input type="text" class="form-control" id="cvSkills" required placeholder="e.g., JavaScript, React, Node.js, Project Management">
+                        </div>
+                        
+                        <div class="border-top pt-3 mt-4">
+                            <h5 class="mb-3">Payment</h5>
+                            <div class="d-flex align-items-center mb-4">
+                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'><rect width='100' height='40' fill='%23323' rx='5'/><text x='50' y='22' font-family='Arial' font-size='12' fill='white' text-anchor='middle'>Telebirr Mockup</text></svg>" alt="Telebirr" class="telebirr-logo">
+                                <span class="ms-3">Pay securely with Telebirr</span>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Total amount to pay: <strong>50 ETB</strong> for CV creation and hosting
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Pay with Telebirr and Create CV</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Base URL - Change this to your Render deployment URL
+        const API_BASE_URL = 'https://your-render-app.onrender.com/api';
+        
+        // DOM Elements
+        const authButtons = document.getElementById('auth-buttons');
+        const userMenu = document.getElementById('user-menu');
+        const usernameSpan = document.getElementById('username');
+        const loginForm = document.getElementById('login-form');
+        const seekerRegisterForm = document.getElementById('seeker-register-form');
+        const employerRegisterForm = document.getElementById('employer-register-form');
+        const profileForm = document.getElementById('profile-form');
+        const jobForm = document.getElementById('job-form');
+        const cvForm = document.getElementById('cv-form');
+        const jobsContainer = document.getElementById('jobs-container');
+        const toast = document.querySelector('.toast');
+        const toastMessage = document.getElementById('toast-message');
+        const logoutBtn = document.getElementById('logout-btn');
+        const cvModal = document.getElementById('cvModal');
+        const cvModalTitle = document.getElementById('cvModalTitle');
+        const cvTemplateInput = document.getElementById('cvTemplate');
+        const profileUpload = document.getElementById('profile-upload');
+        const uploadTrigger = document.getElementById('upload-trigger');
+        const profileImage = document.getElementById('profile-image');
+
+        // Initialize Bootstrap toast
+        const bsToast = new bootstrap.Toast(toast);
+
+        // Check if user is logged in
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token && user) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'block';
+                usernameSpan.textContent = user.name || user.email;
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Show notification
+        function showNotification(message, isError = false) {
+            toastMessage.textContent = message;
+            if (isError) {
+                toast.classList.add('bg-danger');
+                toast.classList.remove('bg-success');
+            } else {
+                toast.classList.add('bg-success');
+                toast.classList.remove('bg-danger');
+            }
+            bsToast.show();
+        }
+
+        // API Request Helper
+        async function apiRequest(url, options = {}) {
+            const token = localStorage.getItem('token');
+            
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${url}`, {
+                    ...options,
+                    headers
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API request error:', error);
+                throw error;
+            }
+        }
+
+        // Load jobs from API
+        async function loadJobs() {
+            try {
+                const data = await apiRequest('/jobs');
+                displayJobs(data.jobs || []);
+            } catch (error) {
+                console.error('Failed to load jobs:', error);
+                showNotification('Failed to load jobs. Please try again later.', true);
+            }
+        }
+
+        // Display jobs in the UI
+        function displayJobs(jobs) {
+            if (jobs.length === 0) {
+                jobsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-briefcase fa-3x mb-3 text-muted"></i>
+                        <h4>No jobs available at the moment</h4>
+                        <p>Check back later for new opportunities</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            jobsContainer.innerHTML = jobs.map(job => `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card job-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-${getJobTypeBadgeColor(job.type)}">${job.type}</span>
+                                <span class="text-success">${job.salary || 'Negotiable'}</span>
+                            </div>
+                            <h5 class="card-title mt-3">${job.title}</h5>
+                            <p class="card-text">${job.description.substring(0, 100)}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-building me-2 text-muted"></i>${job.company}</span>
+                                <span><i class="fas fa-map-marker-alt me-2 text-muted"></i>${job.location}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                            <small class="text-muted ms-3"><i class="far fa-clock me-1"></i>${formatDate(job.createdAt)}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Helper function to get badge color based on job type
+        function getJobTypeBadgeColor(type) {
+            const colors = {
+                'full-time': 'success',
+                'part-time': 'info',
+                'contract': 'warning',
+                'internship': 'primary'
+            };
+            return colors[type] || 'secondary';
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Today';
+            if (diffDays === 2) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays - 1} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadJobs();
+            
+            // Update active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - 100)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const data = await apiRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+                
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                showNotification('Login successful!');
+                checkAuthStatus();
+                
+                // Close the modal
+                const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                loginModal.hide();
+                
+                // Reset form
+                loginForm.reset();
+            } catch (error) {
+                showNotification(error.message || 'Login failed. Please try again.', true);
+            }
+        });
+
+        // Job Seeker Registration
+        seekerRegisterForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('seekerName').value;
+            const email = document.getElementById('seekerEmail').value;
+            const password = document.getElementById('seekerPassword').value;
+            
+            try {
+                const data = await apiRequest('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        name, 
+                        email, 
+                        password, 
+                        role: 'jobseeker' 
+                    })
+                });
+                
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                showNotification('Registration successful!');
+                checkAuthStatus();
+                
+                // Close the modal
+                const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                registerModal.hide();
+                
+                // Reset form
+                seekerRegisterForm.reset();
+            } catch (error) {
+                showNotification(error.message || 'Registration failed. Please try again.', true);
+            }
+        });
+
+        // Employer Registration
+        employerRegisterForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const company = document.getElementById('employerCompanyName').value;
+            const email = document.getElementById('employerEmail').value;
+            const password = document.getElementById('employerPassword').value;
+            
+            try {
+                const data = await apiRequest('/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        name: company, 
+                        email, 
+                        password, 
+                        role: 'employer',
+                        company 
+                    })
+                });
+                
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                showNotification('Registration successful!');
+                checkAuthStatus();
+                
+                // Close the modal
+                const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                registerModal.hide();
+                
+                // Reset form
+                employerRegisterForm.reset();
+            } catch (error) {
+                showNotification(error.message || 'Registration failed. Please try again.', true);
+            }
+        });
+
+        // Profile form submission
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('profileName').value;
+            const email = document.getElementById('profileEmail').value;
+            const phone = document.getElementById('profilePhone').value;
+            const location = document.getElementById('profileLocation').value;
+            const bio = document.getElementById('profileBio').value;
+            const skills = document.getElementById('profileSkills').value;
+            
+            try {
+                await apiRequest('/profile', {
+                    method: 'PUT',
+                    body: JSON.stringify({ 
+                        name, 
+                        email, 
+                        phone, 
+                        location, 
+                        bio, 
+                        skills 
+                    })
+                });
+                
+                // Update local user data
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                user.name = name;
+                user.email = email;
+                localStorage.setItem('user', JSON.stringify(user));
+                
+                usernameSpan.textContent = name;
+                
+                showNotification('Profile updated successfully!');
+                
+                // Close the modal
+                const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+                profileModal.hide();
+            } catch (error) {
+                showNotification(error.message || 'Failed to update profile. Please try again.', true);
+            }
+        });
+
+        // Job posting form submission
+        jobForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('jobTitle').value;
+            const company = document.getElementById('companyName').value;
+            const type = document.getElementById('jobType').value;
+            const salary = document.getElementById('salaryRange').value;
+            const description = document.getElementById('jobDescription').value;
+            const location = document.getElementById('location').value;
+            const applicationEmail = document.getElementById('applicationEmail').value;
+            const postToTelegram = document.getElementById('telegramPost').checked;
+            
+            try {
+                await apiRequest('/jobs', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        title, 
+                        company, 
+                        type, 
+                        salary, 
+                        description, 
+                        location, 
+                        applicationEmail,
+                        postToTelegram
+                    })
+                });
+                
+                showNotification('Job posted successfully!');
+                jobForm.reset();
+                
+                // Reload jobs
+                loadJobs();
+            } catch (error) {
+                showNotification(error.message || 'Failed to post job. Please try again.', true);
+            }
+        });
+
+        // CV form submission
+        cvForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('cvFullName').value;
+            const jobTitle = document.getElementById('cvJobTitle').value;
+            const email = document.getElementById('cvEmail').value;
+            const phone = document.getElementById('cvPhone').value;
+            const summary = document.getElementById('cvSummary').value;
+            const experience = document.getElementById('cvExperience').value;
+            const education = document.getElementById('cvEducation').value;
+            const skills = document.getElementById('cvSkills').value;
+            const template = cvTemplateInput.value;
+            
+            try {
+                const data = await apiRequest('/cv', {
+                    method: 'POST',
+                    body: JSON.stringify({ 
+                        fullName, 
+                        jobTitle, 
+                        email, 
+                        phone, 
+                        summary, 
+                        experience, 
+                        education, 
+                        skills, 
+                        template
+                    })
+                });
+                
+                showNotification('CV created successfully!');
+                
+                // Close the modal
+                const cvModalInstance = bootstrap.Modal.getInstance(document.getElementById('cvModal'));
+                cvModalInstance.hide();
+                
+                // Show shareable link
+                showNotification(`Your CV is available at: ${data.shareableLink}`);
+            } catch (error) {
+                showNotification(error.message || 'Failed to create CV. Please try again.', true);
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            checkAuthStatus();
+            showNotification('You have been logged out.');
+        });
+
+        // CV template selection
+        document.querySelectorAll('[data-bs-target="#cvModal"]').forEach(button => {
+            button.addEventListener('click', function() {
+                const template = this.getAttribute('data-template');
+                cvTemplateInput.value = template;
+                cvModalTitle.textContent = `Create Your CV - ${template.charAt(0).toUpperCase() + template.slice(1)} Template`;
+            });
+        });
+
+        // Profile image upload
+        uploadTrigger.addEventListener('click', function() {
+            profileUpload.click();
+        });
+
+        profileUpload.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                    // In a real app, you would upload this to your server
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Load profile data when modal is shown
+        document.getElementById('profileModal').addEventListener('show.bs.modal', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+            
+            document.getElementById('profileName').value = user.name || '';
+            document.getElementById('profileEmail').value = user.email || '';
+            document.getElementById('profilePhone').value = profile.phone || '';
+            document.getElementById('profileLocation').value = profile.location || '';
+            document.getElementById('profileBio').value = profile.bio || '';
+            document.getElementById('profileSkills').value = profile.skills || '';
+        });
+
+        // Load user data for CV form when modal is shown
+        document.getElementById('cvModal').addEventListener('show.bs.modal', function() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+            
+            if (user.name) document.getElementById('cvFullName').value = user.name;
+            if (profile.title) document.getElementById('cvJobTitle').value = profile.title;
+            if (user.email) document.getElementById('cvEmail').value = user.email;
+            if (profile.phone) document.getElementById('cvPhone').value = profile.phone;
+            if (profile.bio) document.getElementById('cvSummary').value = profile.bio;
+            if (profile.skills) document.getElementById('cvSkills').value = profile.skills;
+        });
+    </script>
+</body>
+</html>
