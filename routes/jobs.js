@@ -1,181 +1,256 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { auth } = require('../middleware/auth');
+const Job = require('../models/Job');
+const { auth, requireRole } = require('../middleware/auth');
 const router = express.Router();
 
-// Register new user
-router.post('/register', async (req, res) => {
+// Get all jobs (with optional filters)
+router.get('/', async (req, res) => {
   try {
-    const { name, email, password, role, company, phone } = req.body;
+    const { page = 1, limit = 10, type, location, search, remote } = req.query;
+    
+    // Build filter object
+    const filter = { isActive: true };
+    if (type) filter.type = type;
+    if (location) filter.location = new RegExp(location, 'i');
+    if (remote !== undefined) filter.isRemote = remote === 'true';
+    if (search) {
+      filter.$or = [
+        { title: new RegExp(search, 'i') },
+        { description: new RegExp(search, 'i') },
+        { company: new RegExp(search, 'i') }
+      ];
+    }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
+    const jobs = await Job.find(filter)
+      .populate('employer', 'name company')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const total = await Job.countDocuments(filter);
+
+    res.json({
+      success: true,
+      jobs,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
+    });
+  } catch (error) {
+    console.error('Get jobs error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching jobs.'
+    });
+  }
+});
+
+// Get single job by ID or shareable link
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    let job;
+    if (id.length === 24) { // MongoDB ObjectId
+      job = await Job.findById(id).populate('employer', 'name company email phone');
+    } else {
+      job = await Job.findOne({ shareableLink: id }).populate('employer', 'name company email phone');
+    }
+
+    if (!job || !job.isActive) {
+      return res.status(404).json({
         success: false,
-        message: 'User already exists with this email.'
+        message: 'Job not found.'
       });
     }
 
-    // Create new user
-    const user = new User({
-      name,
-      email,
-      password,
-      role,
-      ...(role === 'employer' && { company }),
-      ...(phone && { phone })
+    res.json({
+      success: true,
+      job
+    });
+  } catch (error) {
+    console.error('Get job error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching job.'
+    });
+  }
+});
+
+// Create new job (employers only)
+router.post('/', auth, requireRole(['employer']), async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      company,
+      location,
+      type,
+      salary,
+      requirements,
+      skills,
+      applicationEmail,
+      applicationUrl,
+      isRemote,
+      experienceLevel,
+      postToTelegram
+    } = req.body;
+
+    const job = new Job({
+      title,
+      description,
+      company: company || req.user.company,
+      location,
+      type,
+      salary,
+      requirements: Array.isArray(requirements) ? requirements : requirements?.split(',').map(r => r.trim()),
+      skills: Array.isArray(skills) ? skills : skills?.split(',').map(s => s.trim()),
+      applicationEmail,
+      applicationUrl,
+      employer: req.user._id,
+      isRemote: isRemote || false,
+      experienceLevel: experienceLevel || 'mid',
+      postedToTelegram: postToTelegram || false,
+      paymentAmount: postToTelegram ? 150 : 100
     });
 
-    await user.save();
+    await job.save();
+    await job.populate('employer', 'name company');
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET || 'fallback_secret', 
-      { expiresIn: '7d' }
-    );
+    // In a real implementation, you would integrate with Telebirr payment gateway here
+    // For now, we'll simulate successful payment after 2 seconds
+    setTimeout(async () => {
+      job.paymentStatus = 'completed';
+      job.telebirrTransactionId = `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      await job.save();
+
+      // If posting to Telegram is requested, simulate that too
+      if (job.postedToTelegram) {
+        job.telegramMessageId = `MSG-${Date.now()}`;
+        job.postedToTelegram = true;
+        await job.save();
+        
+        console.log(`Job posted to Telegram channel: ${job.title}`);
+      }
+    }, 2000);
 
     res.status(201).json({
       success: true,
-      message: 'User registered successfully.',
-      token,
-      user
+      message: 'Job created successfully. Processing payment...',
+      job
     });
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Create job error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during registration.'
+      message: 'Server error while creating job.'
     });
   }
 });
 
-// Login user
-router.post('/login', async (req, res) => {
+// Update job (employer only)
+router.put('/:id', auth, requireRole(['employer']), async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { id } = req.params;
+    const job = await Job.findById(id);
 
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({
+    if (!job) {
+      return res.status(404).json({
         success: false,
-        message: 'Invalid email or password.'
+        message: 'Job not found.'
       });
     }
 
-    // Check password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({
+    // Check if the user owns this job
+    if (job.employer.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
         success: false,
-        message: 'Invalid email or password.'
+        message: 'Access denied. You can only update your own jobs.'
       });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id }, 
-      process.env.JWT_SECRET || 'fallback_secret', 
-      { expiresIn: '7d' }
-    );
+    const updates = req.body;
+    Object.keys(updates).forEach(key => {
+      job[key] = updates[key];
+    });
+
+    await job.save();
+    await job.populate('employer', 'name company');
 
     res.json({
       success: true,
-      message: 'Login successful.',
-      token,
-      user
+      message: 'Job updated successfully.',
+      job
     });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Update job error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during login.'
+      message: 'Server error while updating job.'
     });
   }
 });
 
-// Get current user
-router.get('/me', auth, async (req, res) => {
+// Delete job (employer only)
+router.delete('/:id', auth, requireRole(['employer']), async (req, res) => {
   try {
+    const { id } = req.params;
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: 'Job not found.'
+      });
+    }
+
+    // Check if the user owns this job
+    if (job.employer.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You can only delete your own jobs.'
+      });
+    }
+
+    await Job.findByIdAndDelete(id);
+
     res.json({
       success: true,
-      user: req.user
+      message: 'Job deleted successfully.'
     });
   } catch (error) {
-    console.error('Get user error:', error);
+    console.error('Delete job error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error while fetching user data.'
+      message: 'Server error while deleting job.'
     });
   }
 });
 
-// Update user profile
-router.put('/profile', auth, async (req, res) => {
+// Get employer's jobs
+router.get('/employer/my-jobs', auth, requireRole(['employer']), async (req, res) => {
   try {
-    const { name, phone, location, bio, skills, telebirrAccount, telegramUsername } = req.body;
+    const { page = 1, limit = 10 } = req.query;
     
-    const updateData = {};
-    if (name) updateData.name = name;
-    if (phone) updateData.phone = phone;
-    if (location) updateData.location = location;
-    if (bio) updateData.bio = bio;
-    if (skills) updateData.skills = Array.isArray(skills) ? skills : skills.split(',').map(s => s.trim());
-    if (telebirrAccount) updateData.telebirrAccount = telebirrAccount;
-    if (telegramUsername) updateData.telegramUsername = telegramUsername;
+    const jobs = await Job.find({ employer: req.user._id })
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const total = await Job.countDocuments({ employer: req.user._id });
 
     res.json({
       success: true,
-      message: 'Profile updated successfully.',
-      user
+      jobs,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
     });
   } catch (error) {
-    console.error('Update profile error:', error);
+    console.error('Get employer jobs error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error while updating profile.'
-    });
-  }
-});
-
-// Change password
-router.put('/change-password', auth, async (req, res) => {
-  try {
-    const { currentPassword, newPassword } = req.body;
-
-    // Verify current password
-    const user = await User.findById(req.user._id);
-    const isMatch = await user.comparePassword(currentPassword);
-    
-    if (!isMatch) {
-      return res.status(400).json({
-        success: false,
-        message: 'Current password is incorrect.'
-      });
-    }
-
-    // Update password
-    user.password = newPassword;
-    await user.save();
-
-    res.json({
-      success: true,
-      message: 'Password changed successfully.'
-    });
-  } catch (error) {
-    console.error('Change password error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error while changing password.'
+      message: 'Server error while fetching jobs.'
     });
   }
 });
