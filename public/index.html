@@ -319,14 +319,18 @@
     </section>
 
     <!-- Job Listings Section -->
-        <!-- Job Listings Section -->
+    <!-- Job Listings Section -->
     <section id="job-listings" class="py-5">
         <div class="container">
             <h2 class="section-title">Latest Job Opportunities</h2>
             
-            <div class="offline-mode" id="offline-warning" style="display: none;">
+            <div class="offline-mode" id="offline-warning">
                 <i class="fas fa-wifi-slash me-2"></i>
-                <strong>Offline Mode:</strong> Showing demo data. Connect to the internet to see real job listings.
+                <strong>API Connection Issue:</strong> Showing demo data. The server is returning HTML instead of JSON at <code id="api-endpoint">/api/jobs</code>.
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-primary me-2" id="check-health">Check Health Endpoint</button>
+                    <button class="btn btn-sm btn-outline-secondary" id="view-server-response">View Server Response</button>
+                </div>
             </div>
             
             <div class="row" id="jobs-container">
