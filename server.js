@@ -21,15 +21,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/jobs', jobRoutes);
-app.use('/cv', cvRoutes);
-app.use('/profile', profileRoutes);
+// app.use('/auth', authRoutes);
+// app.use('/jobs', jobRoutes);
+// app.use('/cv', cvRoutes);
+// app.use('/profile', profileRoutes);
 
-//app.use('/api/auth', authRoutes);
-//app.use('/api/jobs', jobRoutes);
-//app.use('/api/cv', cvRoutes);
-//app.use('/api/profile', profileRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/cv', cvRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
